@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control State Machine Circuit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .circuit-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .circuit-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .circuit-svg {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .component {
+            fill: #27ae60;
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .wire {
+            stroke: #2c3e50;
+            stroke-width: 2;
+            fill: none;
+        }
+        .input-label, .output-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .gate-text {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            fill: white;
+            text-anchor: middle;
+        }
+        .state-circle {
+            fill: #f39c12;
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .state-text {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            fill: #2c3e50;
+            text-anchor: middle;
+            font-weight: bold;
+        }
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8f0;
+            border-radius: 5px;
+        }
+        .legend h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .state-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .state-table th, .state-table td {
+            border: 1px solid #27ae60;
+            padding: 5px;
+            text-align: center;
+        }
+        .state-table th {
+            background-color: #27ae60;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="circuit-container">
+        <h3 class="circuit-title">Finite State Machine Control Logic</h3>
+        
+        <svg class="circuit-svg" viewBox="0 0 900 500">
+            <!-- State Register (2-bit) -->
+            <rect x="50" y="200" width="80" height="60" class="component" rx="5"/>
+            <text x="90" y="220" class="gate-text">State</text>
+            <text x="90" y="235" class="gate-text">Register</text>
+            <text x="90" y="250" class="gate-text">2-bit</text>
+            
+            <!-- Next State Logic -->
+            <rect x="200" y="150" width="120" height="100" class="component" rx="5"/>
+            <text x="260" y="180" class="gate-text">Next State</text>
+            <text x="260" y="195" class="gate-text">Combinational</text>
+            <text x="260" y="210" class="gate-text">Logic</text>
+            <text x="260" y="225" class="gate-text">74LS00/02/08</text>
+            
+            <!-- Output Logic -->
+            <rect x="200" y="300" width="120" height="80" class="component" rx="5"/>
+            <text x="260" y="330" class="gate-text">Output</text>
+            <text x="260" y="345" class="gate-text">Logic</text>
+            <text x="260" y="360" class="gate-text">74LS138</text>
+            
+            <!-- State Circles -->
+            <!-- IDLE State -->
+            <circle cx="500" cy="100" r="40" class="state-circle"/>
+            <text x="500" y="100" class="state-text">IDLE</text>
+            <text x="500" y="115" class="state-text">00</text>
+            
+            <!-- PAYMENT State -->
+            <circle cx="650" cy="150" r="40" class="state-circle"/>
+            <text x="650" y="145" class="state-text">PAYMENT</text>
+            <text x="650" y="160" class="state-text">01</text>
+            
+            <!-- ACTIVE State -->
+            <circle cx="650" cy="300" r="40" class="state-circle"/>
+            <text x="650" y="295" class="state-text">ACTIVE</text>
+            <text x="650" y="310" class="state-text">10</text>
+            
+            <!-- EXPIRED State -->
+            <circle cx="500" cy="350" r="40" class="state-circle"/>
+            <text x="500" y="345" class="state-text">EXPIRED</text>
+            <text x="500" y="360" class="state-text">11</text>
+            
+            <!-- State Transitions (arrows) -->
+            <!-- IDLE to PAYMENT -->
+            <path d="M 535 115 Q 580 130 615 140" class="wire" marker-end="url(#arrowhead)"/>
+            <text x="570" y="125" class="input-label">Coin Insert</text>
+            
+            <!-- PAYMENT to ACTIVE -->
+            <path d="M 650 190 L 650 260" class="wire" marker-end="url(#arrowhead)"/>
+            <text x="660" y="225" class="input-label">Payment Complete</text>
+            
+            <!-- ACTIVE to EXPIRED -->
+            <path d="M 615 315 Q 570 330 535 340" class="wire" marker-end="url(#arrowhead)"/>
+            <text x="570" y="335" class="input-label">Time = 0</text>
+            
+            <!-- EXPIRED to IDLE -->
+            <path d="M 500 310 Q 480 250 480 190 Q 480 150 500 140" class="wire" marker-end="url(#arrowhead)"/>
+            <text x="430" y="225" class="input-label">Reset</text>
+            
+            <!-- PAYMENT back to PAYMENT (more coins) -->
+            <path d="M 680 120 Q 720 130 720 150 Q 720 170 690 170" class="wire" marker-end="url(#arrowhead)"/>
+            <text x="725" y="145" class="input-label">More Coins</text>
+            
+            <!-- Clock input -->
+            <rect x="50" y="100" width="60" height="30" class="component" rx="5"/>
+            <text x="80" y="120" class="gate-text">CLK</text>
+            
+            <!-- Input signals -->
+            <text x="20" y="50" class="input-label">Coin_Insert</text>
+            <text x="20" y="65" class="input-label">Payment_Complete</text>
+            <text x="20" y="80" class="input-label">Timer_Zero</text>
+            <text x="20" y="95" class="input-label">Reset</text>
+            
+            <!-- Wires from inputs to next state logic -->
+            <line x1="140" y1="50" x2="200" y2="160" class="wire"/>
+            <line x1="140" y1="65" x2="200" y2="170" class="wire"/>
+            <line x1="140" y1="80" x2="200" y2="180" class="wire"/>
+            <line x1="140" y1="95" x2="200" y2="190" class="wire"/>
+            
+            <!-- State register to next state logic -->
+            <line x1="130" y1="220" x2="200" y2="220" class="wire"/>
+            <line x1="130" y1="240" x2="200" y2="240" class="wire"/>
+            
+            <!-- Next state logic back to state register -->
+            <line x1="200" y1="200" x2="180" y2="200" class="wire"/>
+            <line x1="180" y1="200" x2="180" y2="280" class="wire"/>
+            <line x1="180" y1="280" x2="20" y2="280" class="wire"/>
+            <line x1="20" y1="280" x2="20" y2="230" class="wire"/>
+            <line x1="20" y1="230" x2="50" y2="230" class="wire"/>
+            
+            <!-- Clock to state register -->
+            <line x1="80" y1="130" x2="80" y2="200" class="wire"/>
+            
+            <!-- State register to output logic -->
+            <line x1="130" y1="230" x2="170" y2="230" class="wire"/>
+            <line x1="170" y1="230" x2="170" y2="340" class="wire"/>
+            <line x1="170" y1="340" x2="200" y2="340" class="wire"/>
+            
+            <!-- Output signals -->
+            <text x="400" y="320" class="output-label">Display_Enable</text>
+            <text x="400" y="335" class="output-label">Counter_Enable</text>
+            <text x="400" y="350" class="output-label">Payment_LED</text>
+            <text x="400" y="365" class="output-label">Expired_LED</text>
+            
+            <!-- Output wires -->
+            <line x1="320" y1="320" x2="395" y2="320" class="wire"/>
+            <line x1="320" y1="335" x2="395" y2="335" class="wire"/>
+            <line x1="320" y1="350" x2="395" y2="350" class="wire"/>
+            <line x1="320" y1="365" x2="395" y2="365" class="wire"/>
+            
+            <!-- Arrow marker definition -->
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                refX="10" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#2c3e50"/>
+                </marker>
+            </defs>
+        </svg>
+        
+        <div class="legend">
+            <h4>State Machine Operation:</h4>
+            <p>The finite state machine controls the overall parking meter behavior through four distinct states:</p>
+            
+            <table class="state-table">
+                <tr>
+                    <th>State</th>
+                    <th>Binary</th>
+                    <th>Condition</th>
+                    <th>Outputs Active</th>
+                </tr>
+                <tr>
+                    <td>IDLE</td>
+                    <td>00</td>
+                    <td>Waiting for coins</td>
+                    <td>None</td>
+                </tr>
+                <tr>
+                    <td>PAYMENT</td>
+                    <td>01</td>
+                    <td>Coins being inserted</td>
+                    <td>Payment_LED</td>
+                </tr>
+                <tr>
+                    <td>ACTIVE</td>
+                    <td>10</td>
+                    <td>Parking time counting down</td>
+                    <td>Display_Enable, Counter_Enable</td>
+                </tr>
+                <tr>
+                    <td>EXPIRED</td>
+                    <td>11</td>
+                    <td>Time has run out</td>
+                    <td>Expired_LED</td>
+                </tr>
+            </table>
+            
+            <p><strong>Transition Logic:</strong> Combinational logic determines next state based on current state and input conditions. Output logic generates control signals for display, LEDs, and counter enable.</p>
+        </div>
+    </div>
+</body>
+</html>

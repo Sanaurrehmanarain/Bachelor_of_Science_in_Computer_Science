@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processing Register Circuit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .circuit-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .circuit-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .circuit-svg {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .component {
+            fill: #3498db;
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .wire {
+            stroke: #2c3e50;
+            stroke-width: 2;
+            fill: none;
+        }
+        .input-label, .output-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .gate-text {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            fill: white;
+            text-anchor: middle;
+        }
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .legend h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .coin-values {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+        .coin-value {
+            text-align: center;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="circuit-container">
+        <h3 class="circuit-title">Payment Processing Register Circuit</h3>
+        
+        <svg class="circuit-svg" viewBox="0 0 800 400">
+            <!-- Coin Input Selector -->
+            <rect x="50" y="50" width="80" height="60" class="component" rx="5"/>
+            <text x="90" y="75" class="gate-text">Coin</text>
+            <text x="90" y="88" class="gate-text">Input</text>
+            <text x="90" y="101" class="gate-text">Selector</text>
+            
+            <!-- 4-bit Adder -->
+            <rect x="200" y="80" width="100" height="80" class="component" rx="5"/>
+            <text x="250" y="110" class="gate-text">4-bit</text>
+            <text x="250" y="125" class="gate-text">Adder</text>
+            <text x="250" y="140" class="gate-text">74LS283</text>
+            
+            <!-- 4-bit Register -->
+            <rect x="400" y="70" width="100" height="100" class="component" rx="5"/>
+            <text x="450" y="105" class="gate-text">4-bit</text>
+            <text x="450" y="120" class="gate-text">Register</text>
+            <text x="450" y="135" class="gate-text">74LS173</text>
+            
+            <!-- Comparator -->
+            <rect x="580" y="90" width="100" height="60" class="component" rx="5"/>
+            <text x="630" y="115" class="gate-text">Comparator</text>
+            <text x="630" y="130" class="gate-text">74LS85</text>
+            
+            <!-- Clock -->
+            <rect x="350" y="200" width="60" height="30" class="component" rx="5"/>
+            <text x="380" y="220" class="gate-text">CLK</text>
+            
+            <!-- Wires -->
+            <!-- Coin selector to adder -->
+            <line x1="130" y1="80" x2="200" y2="100" class="wire"/>
+            <line x1="130" y1="90" x2="200" y2="110" class="wire"/>
+            <line x1="130" y1="100" x2="200" y2="120" class="wire"/>
+            <line x1="130" y1="110" x2="200" y2="130" class="wire"/>
+            
+            <!-- Adder to register -->
+            <line x1="300" y1="100" x2="400" y2="90" class="wire"/>
+            <line x1="300" y1="110" x2="400" y2="100" class="wire"/>
+            <line x1="300" y1="120" x2="400" y2="110" class="wire"/>
+            <line x1="300" y1="130" x2="400" y2="120" class="wire"/>
+            
+            <!-- Register to comparator -->
+            <line x1="500" y1="90" x2="580" y2="110" class="wire"/>
+            <line x1="500" y1="100" x2="580" y2="115" class="wire"/>
+            <line x1="500" y1="110" x2="580" y2="120" class="wire"/>
+            <line x1="500" y1="120" x2="580" y2="125" class="wire"/>
+            
+            <!-- Feedback from register to adder -->
+            <line x1="450" y1="170" x2="450" y2="250" class="wire"/>
+            <line x1="450" y1="250" x2="250" y2="250" class="wire"/>
+            <line x1="250" y1="250" x2="250" y2="160" class="wire"/>
+            
+            <!-- Clock to register -->
+            <line x1="380" y1="200" x2="380" y2="180" class="wire"/>
+            <line x1="380" y1="180" x2="450" y2="180" class="wire"/>
+            <line x1="450" y1="180" x2="450" y2="170" class="wire"/>
+            
+            <!-- Labels -->
+            <text x="20" y="45" class="input-label">Coin Inputs</text>
+            <text x="15" y="125" class="input-label">Quarter(0101)</text>
+            <text x="15" y="140" class="input-label">Dime(0010)</text>
+            <text x="15" y="155" class="input-label">Nickel(0001)</text>
+            
+            <text x="700" y="85" class="output-label">Payment</text>
+            <text x="700" y="100" class="output-label">Complete</text>
+            
+            <text x="520" y="45" class="output-label">Current Total</text>
+            
+            <!-- Output arrows -->
+            <polygon points="680,120 695,125 680,130" fill="#2c3e50"/>
+            <polygon points="520,90 535,85 520,80" fill="#2c3e50"/>
+        </svg>
+        
+        <div class="legend">
+            <h4>Circuit Operation:</h4>
+            <p>1. <strong>Coin Input Selector:</strong> Receives coin type and outputs corresponding 4-bit value</p>
+            <p>2. <strong>4-bit Adder:</strong> Adds new coin value to current accumulated total</p>
+            <p>3. <strong>4-bit Register:</strong> Stores accumulated payment total (clocked operation)</p>
+            <p>4. <strong>Comparator:</strong> Checks if accumulated amount meets parking time thresholds</p>
+            
+            <div class="coin-values">
+                <div class="coin-value">Quarter: 0101 (5¢)</div>
+                <div class="coin-value">Dime: 0010 (2¢)</div>
+                <div class="coin-value">Nickel: 0001 (1¢)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

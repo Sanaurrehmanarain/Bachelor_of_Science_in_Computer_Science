@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Arithmetic Calculator Visualization</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .operation-section {
+            margin-bottom: 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .operation-section:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .operation-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            text-align: center;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .binary-display {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .binary-number {
+            text-align: center;
+            padding: 15px;
+            background: #edf2f7;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .binary-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+
+        .binary-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        .result-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea10, #764ba210);
+            border-radius: 10px;
+            border: 2px dashed #667eea;
+        }
+
+        .result-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2d3748;
+            font-size: 1.2em;
+        }
+
+        .bit-visualization {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .bit {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .bit-0 {
+            background: #fed7d7;
+            color: #c53030;
+            border: 2px solid #fc8181;
+        }
+
+        .bit-1 {
+            background: #c6f6d5;
+            color: #38a169;
+            border: 2px solid #68d391;
+        }
+
+        .step-by-step {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f4f8;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .step {
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .module-box {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .module-box:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .module-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .module-desc {
+            font-size: 0.9em;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .binary-display {
+                grid-template-columns: 1fr;
+            }
+            
+            .architecture-diagram {
+                grid-template-columns: 1fr;
+            }
+            
+            .bit-visualization {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Binary Arithmetic Calculator Visualization</h1>
+        
+        <!-- Addition Section -->
+        <div class="operation-section">
+            <div class="operation-title">Binary Addition</div>
+            <div class="input-group">
+                <div class="input-container">
+                    <label class="input-label">First Number</label>
+                    <input type="number" id="add-a" value="107" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <label class="input-label">Second Number</label>
+                    <input type="number" id="add-b" value="54" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <button class="calculate-btn" onclick="performAddition()">Calculate Addition</button>
+                </div>
+            </div>
+            
+            <div id="add-result" class="result-section" style="display: none;">
+                <div class="result-title">Addition Result</div>
+                <div class="binary-display">
+                    <div class="binary-number">
+                        <div class="binary-label">A (Binary)</div>
+                        <div class="binary-value" id="add-a-bin"></div>
+                        <div class="bit-visualization" id="add-a-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">B (Binary)</div>
+                        <div class="binary-value" id="add-b-bin"></div>
+                        <div class="bit-visualization" id="add-b-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">Result (Binary)</div>
+                        <div class="binary-value" id="add-result-bin"></div>
+                        <div class="bit-visualization" id="add-result-bits"></div>
+                    </div>
+                </div>
+                <div class="step-by-step" id="add-steps"></div>
+            </div>
+        </div>
+
+        <!-- Subtraction Section -->
+        <div class="operation-section">
+            <div class="operation-title">Binary Subtraction (Two's Complement)</div>
+            <div class="input-group">
+                <div class="input-container">
+                    <label class="input-label">Minuend</label>
+                    <input type="number" id="sub-a" value="180" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <label class="input-label">Subtrahend</label>
+                    <input type="number" id="sub-b" value="78" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <button class="calculate-btn" onclick="performSubtraction()">Calculate Subtraction</button>
+                </div>
+            </div>
+            
+            <div id="sub-result" class="result-section" style="display: none;">
+                <div class="result-title">Subtraction Result (Using Two's Complement)</div>
+                <div class="binary-display">
+                    <div class="binary-number">
+                        <div class="binary-label">A (Binary)</div>
+                        <div class="binary-value" id="sub-a-bin"></div>
+                        <div class="bit-visualization" id="sub-a-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">-B (Two's Complement)</div>
+                        <div class="binary-value" id="sub-b-comp"></div>
+                        <div class="bit-visualization" id="sub-b-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">Result (Binary)</div>
+                        <div class="binary-value" id="sub-result-bin"></div>
+                        <div class="bit-visualization" id="sub-result-bits"></div>
+                    </div>
+                </div>
+                <div class="step-by-step" id="sub-steps"></div>
+            </div>
+        </div>
+
+        <!-- Multiplication Section -->
+        <div class="operation-section">
+            <div class="operation-title">Binary Multiplication</div>
+            <div class="input-group">
+                <div class="input-container">
+                    <label class="input-label">Multiplicand</label>
+                    <input type="number" id="mul-a" value="13" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <label class="input-label">Multiplier</label>
+                    <input type="number" id="mul-b" value="11" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <button class="calculate-btn" onclick="performMultiplication()">Calculate Multiplication</button>
+                </div>
+            </div>
+            
+            <div id="mul-result" class="result-section" style="display: none;">
+                <div class="result-title">Multiplication Result (Shift-and-Add Method)</div>
+                <div class="binary-display">
+                    <div class="binary-number">
+                        <div class="binary-label">A (Binary)</div>
+                        <div class="binary-value" id="mul-a-bin"></div>
+                        <div class="bit-visualization" id="mul-a-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">B (Binary)</div>
+                        <div class="binary-value" id="mul-b-bin"></div>
+                        <div class="bit-visualization" id="mul-b-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">Result (Binary)</div>
+                        <div class="binary-value" id="mul-result-bin"></div>
+                        <div class="bit-visualization" id="mul-result-bits"></div>
+                    </div>
+                </div>
+                <div class="step-by-step" id="mul-steps"></div>
+            </div>
+        </div>
+
+        <!-- Division Section -->
+        <div class="operation-section">
+            <div class="operation-title">Binary Division</div>
+            <div class="input-group">
+                <div class="input-container">
+                    <label class="input-label">Dividend</label>
+                    <input type="number" id="div-a" value="100" min="0" max="255">
+                </div>
+                <div class="input-container">
+                    <label class="input-label">Divisor</label>
+                    <input type="number" id="div-b" value="12" min="1" max="255">
+                </div>
+                <div class="input-container">
+                    <button class="calculate-btn" onclick="performDivision()">Calculate Division</button>
+                </div>
+            </div>
+            
+            <div id="div-result" class="result-section" style="display: none;">
+                <div class="result-title">Division Result (Restoring Division Algorithm)</div>
+                <div class="binary-display">
+                    <div class="binary-number">
+                        <div class="binary-label">Dividend (Binary)</div>
+                        <div class="binary-value" id="div-a-bin"></div>
+                        <div class="bit-visualization" id="div-a-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">Quotient (Binary)</div>
+                        <div class="binary-value" id="div-quotient-bin"></div>
+                        <div class="bit-visualization" id="div-quotient-bits"></div>
+                    </div>
+                    <div class="binary-number">
+                        <div class="binary-label">Remainder (Binary)</div>
+                        <div class="binary-value" id="div-remainder-bin"></div>
+                        <div class="bit-visualization" id="div-remainder-bits"></div>
+                    </div>
+                </div>
+                <div class="step-by-step" id="div-steps"></div>
+            </div>
+        </div>
+
+        <!-- Architecture Overview -->
+        <div class="operation-section">
+            <div class="operation-title">Calculator Architecture Overview</div>
+            <div class="architecture-diagram">
+                <div class="module-box">
+                    <div class="module-title">Adder Module</div>
+                    <div class="module-desc">Cascaded full-adder circuits with carry propagation for multi-bit binary addition operations</div>
+                </div>
+                <div class="module-box">
+                    <div class="module-title">Subtractor Module</div>
+                    <div class="module-desc">Two's complement implementation using inverter stage followed by adder circuit</div>
+                </div>
+                <div class="module-box">
+                    <div class="module-title">Multiplier Module</div>
+                    <div class="module-desc">Shift-and-add algorithm with partial product generation and tree accumulation</div>
+                </div>
+                <div class="module-box">
+                    <div class="module-title">Divider Module</div>
+                    <div class="module-desc">Restoring division algorithm with iterative subtraction and shift operations</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function decimalToBinary(num, bits = 8) {
+            return num.toString(2).padStart(bits, '0');
+        }
+
+        function createBitVisualization(binary, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            for (let i = 0; i < binary.length; i++) {
+                const bit = document.createElement('div');
+                bit.className = `bit bit-${binary[i]}`;
+                bit.textContent = binary[i];
+                container.appendChild(bit);
+            }
+        }
+
+        function twosComplement(num, bits = 8) {
+            const binary = decimalToBinary(num, bits);
+            let inverted = '';
+            
+            // Invert bits
+            for (let i = 0; i < binary.length; i++) {
+                inverted += binary[i] === '0' ? '1' : '0';
+            }
+            
+            // Add 1
+            let carry = 1;
+            let result = '';
+            
+            for (let i = inverted.length - 1; i >= 0; i--) {
+                const sum = parseInt(inverted[i]) + carry;
+                result = (sum % 2) + result;
+                carry = Math.floor(sum / 2);
+            }
+            
+            return result;
+        }
+
+        function performAddition() {
+            const a = parseInt(document.getElementById('add-a').value);
+            const b = parseInt(document.getElementById('add-b').value);
+            const result = a + b;
+            
+            const aBin = decimalToBinary(a);
+            const bBin = decimalToBinary(b);
+            const resultBin = decimalToBinary(result, 9);
+            
+            document.getElementById('add-a-bin').textContent = aBin;
+            document.getElementById('add-b-bin').textContent = bBin;
+            document.getElementById('add-result-bin').textContent = resultBin;
+            
+            createBitVisualization(aBin, 'add-a-bits');
+            createBitVisualization(bBin, 'add-b-bits');
+            createBitVisualization(resultBin, 'add-result-bits');
+            
+            // Show step-by-step
+            let steps = `Step-by-step Addition:\n`;
+            steps += `${a} (decimal) = ${aBin} (binary)\n`;
+            steps += `${b} (decimal) = ${bBin} (binary)\n`;
+            steps += `Sum = ${result} (decimal) = ${resultBin} (binary)\n`;
+            steps += `\nCarry propagation flows from right to left (LSB to MSB)`;
+            
+            document.getElementById('add-steps').innerHTML = steps.replace(/\n/g, '<br>');
+            document.getElementById('add-result').style.display = 'block';
+        }
+
+        function performSubtraction() {
+            const a = parseInt(document.getElementById('sub-a').value);
+            const b = parseInt(document.getElementById('sub-b').value);
+            const result = Math.max(0, a - b);
+            
+            const aBin = decimalToBinary(a);
+            const bComp = twosComplement(b);
+            const resultBin = decimalToBinary(result);
+            
+            document.getElementById('sub-a-bin').textContent = aBin;
+            document.getElementById('sub-b-comp').textContent = bComp;
+            document.getElementById('sub-result-bin').textContent = resultBin;
+            
+            createBitVisualization(aBin, 'sub-a-bits');
+            createBitVisualization(bComp, 'sub-b-bits');
+            createBitVisualization(resultBin, 'sub-result-bits');
+            
+            // Show step-by-step
+            let steps = `Step-by-step Subtraction (Two's Complement):\n`;
+            steps += `${a} - ${b} = ${a} + (-${b})\n`;
+            steps += `${a} (decimal) = ${aBin} (binary)\n`;
+            steps += `${b} (decimal) = ${decimalToBinary(b)} (binary)\n`;
+            steps += `Invert bits of ${b}: ${decimalToBinary(b).split('').map(bit => bit === '0' ? '1' : '0').join('')}\n`;
+            steps += `Add 1: ${bComp} (two's complement of ${b})\n`;
+            steps += `Result = ${result} (decimal) = ${resultBin} (binary)`;
+            
+            document.getElementById('sub-steps').innerHTML = steps.replace(/\n/g, '<br>');
+            document.getElementById('sub-result').style.display = 'block';
+        }
+
+        function performMultiplication() {
+            const a = parseInt(document.getElementById('mul-a').value);
+            const b = parseInt(document.getElementById('mul-b').value);
+            const result = a * b;
+            
+            const aBin = decimalToBinary(a);
+            const bBin = decimalToBinary(b);
+            const resultBin = decimalToBinary(result, 16);
+            
+            document.getElementById('mul-a-bin').textContent = aBin;
+            document.getElementById('mul-b-bin').textContent = bBin;
+            document.getElementById('mul-result-bin').textContent = resultBin;
+            
+            createBitVisualization(aBin, 'mul-a-bits');
+            createBitVisualization(bBin, 'mul-b-bits');
+            createBitVisualization(resultBin, 'mul-result-bits');
+            
+            // Generate partial products
+            let steps = `Step-by-step Multiplication (Shift-and-Add):\n`;
+            steps += `${a} (decimal) = ${aBin} (binary)\n`;
+            steps += `${b} (decimal) = ${bBin} (binary)\n\n`;
+            steps += `Partial Products:\n`;
+            
+            const bBinReverse = bBin.split('').reverse();
+            for (let i = 0; i < bBinReverse.length; i++) {
+                if (bBinReverse[i] === '1') {
+                    const shifted = aBin + '0'.repeat(i);
+                    steps += `${aBin} << ${i} = ${shifted}\n`;
+                }
+            }
+            
+            steps += `\nFinal Result = ${result} (decimal) = ${resultBin} (binary)`;
+            
+            document.getElementById('mul-steps').innerHTML = steps.replace(/\n/g, '<br>');
+            document.getElementById('mul-result').style.display = 'block';
+        }
+
+        function performDivision() {
+            const a = parseInt(document.getElementById('div-a').value);
+            const b = parseInt(document.getElementById('div-b').value);
+            const quotient = Math.floor(a / b);
+            const remainder = a % b;
+            
+            const aBin = decimalToBinary(a);
+            const quotientBin = decimalToBinary(quotient);
+            const remainderBin = decimalToBinary(remainder);
+            
+            document.getElementById('div-a-bin').textContent = aBin;
+            document.getElementById('div-quotient-bin').textContent = quotientBin;
+            document.getElementById('div-remainder-bin').textContent = remainderBin;
+            
+            createBitVisualization(aBin, 'div-a-bits');
+            createBitVisualization(quotientBin, 'div-quotient-bits');
+            createBitVisualization(remainderBin, 'div-remainder-bits');
+            
+            // Show step-by-step
+            let steps = `Step-by-step Division (Restoring Algorithm):\n`;
+            steps += `${a} ÷ ${b}\n`;
+            steps += `Dividend: ${a} (decimal) = ${aBin} (binary)\n`;
+            steps += `Divisor: ${b} (decimal) = ${decimalToBinary(b)} (binary)\n\n`;
+            steps += `Using iterative subtraction and shift operations:\n`;
+            steps += `Quotient: ${quotient} (decimal) = ${quotientBin} (binary)\n`;
+            steps += `Remainder: ${remainder} (decimal) = ${remainderBin} (binary)\n\n`;
+            steps += `Verification: ${quotient} × ${b} + ${remainder} = ${quotient * b + remainder} = ${a} ✓`;
+            
+            document.getElementById('div-steps').innerHTML = steps.replace(/\n/g, '<br>');
+            document.getElementById('div-result').style.display = 'block';
+        }
+
+        // Initialize with default calculations
+        window.onload = function() {
+            performAddition();
+            performSubtraction();
+            performMultiplication();
+            performDivision();
+        };
+    </script>
+</body>
+</html>

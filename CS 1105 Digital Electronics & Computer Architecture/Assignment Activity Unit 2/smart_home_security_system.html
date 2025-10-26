@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Security System Simulation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .control-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .circuit-diagram {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .method-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .method-button {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .method-button.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 300px;
+        }
+        
+        .key {
+            aspect-ratio: 1;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.2s;
+        }
+        
+        .key:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .key:active {
+            transform: translateY(0);
+            background: #007bff;
+            color: white;
+        }
+        
+        .display {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 15px;
+            min-height: 30px;
+        }
+        
+        .keycard-area {
+            border: 2px dashed #dee2e6;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .keycard-area:hover {
+            border-color: #007bff;
+            background: #f8f9ff;
+        }
+        
+        .keycard-area.active {
+            border-color: #28a745;
+            background: #f8fff8;
+        }
+        
+        .room-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .room-button {
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .room-button.active {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .status-panel {
+            grid-column: 1 / -1;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #dee2e6;
+        }
+        
+        .status-item.active {
+            border-left-color: #28a745;
+        }
+        
+        .status-item.error {
+            border-left-color: #dc3545;
+        }
+        
+        .circuit-element {
+            position: absolute;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .circuit-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .circuit-element.active {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .wire {
+            position: absolute;
+            height: 3px;
+            background: #333;
+            border-radius: 1.5px;
+        }
+        
+        .wire.active {
+            background: #28a745;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .truth-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .truth-table th,
+        .truth-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .truth-table th {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .truth-table tr.active {
+            background: #d4edda;
+        }
+        
+        .clear-button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .clear-button:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Smart Home Security System</h1>
+            <p>Interactive simulation of combinational logic access control</p>
+        </div>
+        
+        <div class="main-grid">
+            <div class="control-panel">
+                <div class="section-title">
+                    🎛️ Control Interface
+                </div>
+                
+                <div class="input-group">
+                    <label>Authentication Method:</label>
+                    <div class="method-selector">
+                        <div class="method-button active" id="code-method">🔢 Keypad Code</div>
+                        <div class="method-button" id="card-method">💳 Keycard</div>
+                    </div>
+                </div>
+                
+                <div class="input-group" id="keypad-section">
+                    <label>Enter 4-Digit Code:</label>
+                    <div class="display" id="code-display">----</div>
+                    <div class="keypad">
+                        <div class="key" data-value="1">1</div>
+                        <div class="key" data-value="2">2</div>
+                        <div class="key" data-value="3">3</div>
+                        <div class="key" data-value="A">A</div>
+                        <div class="key" data-value="4">4</div>
+                        <div class="key" data-value="5">5</div>
+                        <div class="key" data-value="6">6</div>
+                        <div class="key" data-value="B">B</div>
+                        <div class="key" data-value="7">7</div>
+                        <div class="key" data-value="8">8</div>
+                        <div class="key" data-value="9">9</div>
+                        <div class="key" data-value="C">C</div>
+                        <div class="key" data-value="*">*</div>
+                        <div class="key" data-value="0">0</div>
+                        <div class="key" data-value="#">#</div>
+                        <div class="key" data-value="D">D</div>
+                    </div>
+                    <button class="clear-button" id="clear-code">Clear</button>
+                </div>
+                
+                <div class="input-group" id="keycard-section" style="display: none;">
+                    <label>Present Keycard:</label>
+                    <div class="keycard-area" id="keycard-area">
+                        <div>💳</div>
+                        <div>Tap to simulate keycard</div>
+                        <div style="font-size: 0.9em; margin-top: 10px;">Card ID: <span id="card-id">None</span></div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Select Room:</label>
+                    <div class="room-selector">
+                        <div class="room-button active" data-room="0">🏠 Main Door</div>
+                        <div class="room-button" data-room="1">🛏️ Bedroom</div>
+                        <div class="room-button" data-room="2">🏢 Office</div>
+                        <div class="room-button" data-room="3">🔐 Safe Room</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="circuit-diagram">
+                <div class="section-title">
+                    ⚡ Circuit Logic Flow
+                </div>
+                
+                <!-- Circuit elements will be dynamically positioned -->
+                <div class="circuit-element" id="input-mux" style="top: 50px; left: 50px;">
+                    Input MUX<br>(2:1)
+                </div>
+                
+                <div class="circuit-element" id="decoder" style="top: 50px; left: 200px;">
+                    4:16<br>DECODER
+                </div>
+                
+                <div class="circuit-element" id="comparator" style="top: 50px; left: 350px;">
+                    CODE<br>MATCH
+                </div>
+                
+                <div class="circuit-element" id="and-gate" style="top: 150px; left: 350px;">
+                    AND<br>GATE
+                </div>
+                
+                <div class="circuit-element" id="demux" style="top: 150px; left: 200px;">
+                    1:4<br>DEMUX
+                </div>
+                
+                <div class="circuit-element" id="room-output" style="top: 150px; left: 50px;">
+                    ROOM<br>UNLOCK
+                </div>
+                
+                <!-- Wires -->
+                <div class="wire" id="wire1" style="top: 70px; left: 140px; width: 50px;"></div>
+                <div class="wire" id="wire2" style="top: 70px; left: 290px; width: 50px;"></div>
+                <div class="wire" id="wire3" style="top: 100px; left: 375px; width: 3px; height: 50px; transform: rotate(90deg);"></div>
+                <div class="wire" id="wire4" style="top: 170px; left: 290px; width: 50px;"></div>
+                <div class="wire" id="wire5" style="top: 170px; left: 140px; width: 50px;"></div>
+                
+                <div style="position: absolute; bottom: 20px; left: 20px; font-size: 0.9em; color: #666;">
+                    Click elements to see detailed operation
+                </div>
+            </div>
+        </div>
+        
+        <div class="status-panel">
+            <div class="section-title">
+                📊 System Status & Logic Analysis
+            </div>
+            
+            <div class="status-grid">
+                <div class="status-item" id="method-status">
+                    <strong>Authentication Method</strong><br>
+                    <span id="method-text">Keypad Code Selected</span>
+                </div>
+                
+                <div class="status-item" id="input-status">
+                    <strong>Input Processing</strong><br>
+                    <span id="input-text">Waiting for input...</span>
+                </div>
+                
+                <div class="status-item" id="validation-status">
+                    <strong>Code Validation</strong><br>
+                    <span id="validation-text">No code entered</span>
+                </div>
+                
+                <div class="status-item" id="access-status">
+                    <strong>Access Control</strong><br>
+                    <span id="access-text">Access denied</span>
+                </div>
+            </div>
+            
+            <table class="truth-table">
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Master Code</th>
+                        <th>Guest Code</th>
+                        <th>Admin Card</th>
+                        <th>Guest Card</th>
+                        <th>Access Granted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-room="0">
+                        <td>Main Door</td>
+                        <td>1234</td>
+                        <td>5678</td>
+                        <td>A001</td>
+                        <td>G001</td>
+                        <td id="access-0">❌</td>
+                    </tr>
+                    <tr data-room="1">
+                        <td>Bedroom</td>
+                        <td>1234</td>
+                        <td>-</td>
+                        <td>A001</td>
+                        <td>-</td>
+                        <td id="access-1">❌</td>
+                    </tr>
+                    <tr data-room="2">
+                        <td>Office</td>
+                        <td>1234</td>
+                        <td>9999</td>
+                        <td>A001</td>
+                        <td>-</td>
+                        <td id="access-2">❌</td>
+                    </tr>
+                    <tr data-room="3">
+                        <td>Safe Room</td>
+                        <td>1234</td>
+                        <td>-</td>
+                        <td>A001</td>
+                        <td>-</td>
+                        <td id="access-3">❌</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentMethod = 'code';
+        let currentCode = '';
+        let currentRoom = 0;
+        let currentCard = null;
+        
+        // Valid codes and cards for each room
+        const accessRules = {
+            0: { codes: ['1234', '5678'], cards: ['A001', 'G001'] }, // Main Door
+            1: { codes: ['1234'], cards: ['A001'] }, // Bedroom
+            2: { codes: ['1234', '9999'], cards: ['A001'] }, // Office
+            3: { codes: ['1234'], cards: ['A001'] } // Safe Room
+        };
+        
+        const cardDatabase = ['A001', 'A002', 'G001', 'G002', 'INVALID'];
+        
+        // Method selection
+        document.getElementById('code-method').addEventListener('click', () => {
+            setMethod('code');
+        });
+        
+        document.getElementById('card-method').addEventListener('click', () => {
+            setMethod('card');
+        });
+        
+        function setMethod(method) {
+            currentMethod = method;
+            
+            document.querySelectorAll('.method-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(method + '-method').classList.add('active');
+            
+            document.getElementById('keypad-section').style.display = method === 'code' ? 'block' : 'none';
+            document.getElementById('keycard-section').style.display = method === 'card' ? 'block' : 'none';
+            
+            document.getElementById('method-text').textContent = 
+                method === 'code' ? 'Keypad Code Selected' : 'Keycard Selected';
+            
+            updateStatus();
+            updateCircuit();
+        }
+        
+        // Keypad handling
+        document.querySelectorAll('.key').forEach(key => {
+            key.addEventListener('click', () => {
+                const value = key.dataset.value;
+                if (currentCode.length < 4 && '0123456789ABCD'.includes(value)) {
+                    currentCode += value;
+                    updateCodeDisplay();
+                    updateStatus();
+                    updateCircuit();
+                }
+            });
+        });
+        
+        document.getElementById('clear-code').addEventListener('click', () => {
+            currentCode = '';
+            updateCodeDisplay();
+            updateStatus();
+            updateCircuit();
+        });
+        
+        function updateCodeDisplay() {
+            const display = currentCode.padEnd(4, '-');
+            document.getElementById('code-display').textContent = display;
+        }
+        
+        // Keycard handling
+        document.getElementById('keycard-area').addEventListener('click', () => {
+            currentCard = cardDatabase[Math.floor(Math.random() * cardDatabase.length)];
+            document.getElementById('card-id').textContent = currentCard;
+            document.getElementById('keycard-area').classList.add('active');
+            updateStatus();
+            updateCircuit();
+            
+            setTimeout(() => {
+                document.getElementById('keycard-area').classList.remove('active');
+            }, 2000);
+        });
+        
+        // Room selection
+        document.querySelectorAll('.room-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentRoom = parseInt(btn.dataset.room);
+                document.querySelectorAll('.room-button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateStatus();
+                updateCircuit();
+            });
+        });
+        
+        function updateStatus() {
+            const inputText = document.getElementById('input-text');
+            const validationText = document.getElementById('validation-text');
+            const accessText = document.getElementById('access-text');
+            
+            if (currentMethod === 'code') {
+                if (currentCode.length === 0) {
+                    inputText.textContent = 'Waiting for code input...';
+                    validationText.textContent = 'No code entered';
+                } else if (currentCode.length < 4) {
+                    inputText.textContent = `Code: ${currentCode} (${4 - currentCode.length} digits needed)`;
+                    validationText.textContent = 'Code incomplete';
+                } else {
+                    inputText.textContent = `Code: ${currentCode} (Complete)`;
+                    const isValid = accessRules[currentRoom].codes.includes(currentCode);
+                    validationText.textContent = isValid ? 'Code valid for selected room' : 'Code invalid for selected room';
+                }
+            } else {
+                if (currentCard) {
+                    inputText.textContent = `Card ID: ${currentCard}`;
+                    const isValid = accessRules[currentRoom].cards.includes(currentCard);
+                    validationText.textContent = isValid ? 'Card authorized for selected room' : 'Card not authorized for selected room';
+                } else {
+                    inputText.textContent = 'Waiting for keycard...';
+                    validationText.textContent = 'No card presented';
+                }
+            }
+            
+            const hasAccess = checkAccess();
+            accessText.textContent = hasAccess ? `Access granted to ${getRoomName(currentRoom)}` : 'Access denied';
+            
+            // Update status item styles
+            document.getElementById('method-status').className = 'status-item active';
+            document.getElementById('input-status').className = 
+                (currentMethod === 'code' && currentCode.length > 0) || (currentMethod === 'card' && currentCard) 
+                ? 'status-item active' : 'status-item';
+            document.getElementById('validation-status').className = 
+                checkCredentialValid() ? 'status-item active' : 'status-item';
+            document.getElementById('access-status').className = 
+                hasAccess ? 'status-item active' : 'status-item error';
+            
+            updateTruthTable();
+        }
+        
+        function checkCredentialValid() {
+            if (currentMethod === 'code') {
+                return currentCode.length === 4 && accessRules[currentRoom].codes.includes(currentCode);
+            } else {
+                return currentCard && accessRules[currentRoom].cards.includes(currentCard);
+            }
+        }
+        
+        function checkAccess() {
+            return checkCredentialValid();
+        }
+        
+        function getRoomName(room) {
+            const names = ['Main Door', 'Bedroom', 'Office', 'Safe Room'];
+            return names[room];
+        }
+        
+        function updateTruthTable() {
+            document.querySelectorAll('.truth-table tbody tr').forEach((row, index) => {
+                const accessCell = document.getElementById(`access-${index}`);
+                let hasAccess = false;
+                
+                if (currentMethod === 'code' && currentCode.length === 4) {
+                    hasAccess = accessRules[index].codes.includes(currentCode);
+                } else if (currentMethod === 'card' && currentCard) {
+                    hasAccess = accessRules[index].cards.includes(currentCard);
+                }
+                
+                accessCell.textContent = hasAccess ? '✅' : '❌';
+                row.className = (index === currentRoom && hasAccess) ? 'active' : '';
+            });
+        }
+        
+        function updateCircuit() {
+            const elements = document.querySelectorAll('.circuit-element');
+            const wires = document.querySelectorAll('.wire');
+            
+            // Reset all elements
+            elements.forEach(el => el.classList.remove('active'));
+            wires.forEach(wire => wire.classList.remove('active'));
+            
+            const hasInput = (currentMethod === 'code' && currentCode.length === 4) || 
+                           (currentMethod === 'card' && currentCard);
+            const isValid = checkCredentialValid();
+            const hasAccess = checkAccess();
+            
+            if (hasInput) {
+                document.getElementById('input-mux').classList.add('active');
+                document.getElementById('wire1').classList.add('active');
+                
+                if (isValid) {
+                    document.getElementById('decoder').classList.add('active');
+                    document.getElementById('comparator').classList.add('active');
+                    document.getElementById('wire2').classList.add('active');
+                    document.getElementById('wire3').classList.add('active');
+                    
+                    if (hasAccess) {
+                        document.getElementById('and-gate').classList.add('active');
+                        document.getElementById('demux').classList.add('active');
+                        document.getElementById('room-output').classList.add('active');
+                        document.getElementById('wire4').classList.add('active');
+                        document.getElementById('wire5').classList.add('active');
+                    }
+                }
+            }
+        }
+        
+        // Circuit element click handlers for detailed information
+        document.querySelectorAll('.circuit-element').forEach(element => {
+            element.addEventListener('click', () => {
+                const elementId = element.id;
+                showElementInfo(elementId);
+            });
+        });
+        
+        function showElementInfo(elementId) {
+            const info = {
+                'input-mux': 'Input Multiplexer: Selects between keypad code and keycard ID based on authentication method.',
+                'decoder': '4:16 Decoder: Converts 4-bit input into one-hot 16-line output for code matching.',
+                'comparator': 'Code Matcher: Compares decoded input against authorized codes for the selected room.',
+                'and-gate': 'AND Gate: Combines authentication success with room selection signal.',
+                'demux': '1:4 Demultiplexer: Routes unlock signal to the correct room based on room selection.',
+                'room-output': 'Room Unlock: Final output that controls the physical door lock mechanism.'
+            };
+            
+            alert(info[elementId] || 'Circuit element information');
+        }
+        
+        // Initialize display
+        updateCodeDisplay();
+        updateStatus();
+        updateCircuit();
+    </script>
+</body>
+</html>

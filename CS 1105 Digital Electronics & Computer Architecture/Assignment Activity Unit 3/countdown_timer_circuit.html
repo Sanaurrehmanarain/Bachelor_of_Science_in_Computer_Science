@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer Circuit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .circuit-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .circuit-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .circuit-svg {
+            width: 100%;
+            height: 450px;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .component {
+            fill: #e74c3c;
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .wire {
+            stroke: #2c3e50;
+            stroke-width: 2;
+            fill: none;
+        }
+        .input-label, .output-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: #2c3e50;
+        }
+        .gate-text {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            fill: white;
+            text-anchor: middle;
+        }
+        .flip-flop {
+            fill: #e74c3c;
+            stroke: #2c3e50;
+            stroke-width: 2;
+        }
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fdf2f2;
+            border-radius: 5px;
+        }
+        .legend h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .timing-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+        .time-value {
+            text-align: center;
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="circuit-container">
+        <h3 class="circuit-title">6-bit Synchronous Down Counter (Countdown Timer)</h3>
+        
+        <svg class="circuit-svg" viewBox="0 0 900 450">
+            <!-- Clock Divider -->
+            <rect x="50" y="50" width="80" height="60" class="component" rx="5"/>
+            <text x="90" y="75" class="gate-text">Clock</text>
+            <text x="90" y="88" class="gate-text">Divider</text>
+            <text x="90" y="101" class="gate-text">÷60</text>
+            
+            <!-- JK Flip-Flops for 6-bit counter -->
+            <!-- FF0 (LSB) -->
+            <rect x="200" y="80" width="60" height="80" class="flip-flop" rx="5"/>
+            <text x="230" y="105" class="gate-text">JK</text>
+            <text x="230" y="118" class="gate-text">FF</text>
+            <text x="230" y="131" class="gate-text">Q0</text>
+            <text x="215" y="95" class="gate-text">J</text>
+            <text x="215" y="145" class="gate-text">K</text>
+            <text x="245" y="95" class="gate-text">Q</text>
+            <text x="245" y="145" class="gate-text">Q̄</text>
+            
+            <!-- FF1 -->
+            <rect x="300" y="80" width="60" height="80" class="flip-flop" rx="5"/>
+            <text x="330" y="105" class="gate-text">JK</text>
+            <text x="330" y="118" class="gate-text">FF</text>
+            <text x="330" y="131" class="gate-text">Q1</text>
+            <text x="315" y="95" class="gate-text">J</text>
+            <text x="315" y="145" class="gate-text">K</text>
+            <text x="345" y="95" class="gate-text">Q</text>
+            <text x="345" y="145" class="gate-text">Q̄</text>
+            
+            <!-- FF2 -->
+            <rect x="400" y="80" width="60" height="80" class="flip-flop" rx="5"/>
+            <text x="430" y="105" class="gate-text">JK</text>
+            <text x="430" y="118" class="gate-text">FF</text>
+            <text x="430" y="131" class="gate-text">Q2</text>
+            <text x="415" y="95" class="gate-text">J</text>
+            <text x="415" y="145" class="gate-text">K</text>
+            <text x="445" y="95" class="gate-text">Q</text>
+            <text x="445" y="145" class="gate-text">Q̄</text>
+            
+            <!-- FF3 -->
+            <rect x="500" y="80" width="60" height="80" class="flip-flop" rx="5"/>
+            <text x="530" y="105" class="gate-text">JK</text>
+            <text x="530" y="118" class="gate-text">FF</text>
+            <text x="530" y="131" class="gate-text">Q3</text>
+            <text x="515" y="95" class="gate-text">J</text>
+            <text x="515" y="145" class="gate-text">K</text>
+            <text x="545" y="95" class="gate-text">Q</text>
+            <text x="545" y="145" class="gate-text">Q̄</text>
+            
+            <!-- FF4 -->
+            <rect x="600" y="80" width="60" height="80" class="flip-flop" rx="5"/>
+            <text x="630" y="105" class="gate-text">JK</text>
+            <text x="630" y="118" class="gate-text">FF</text>
+            <text x="630" y="131" class="gate-text">Q4</text>
+            <text x="615" y="95" class="gate-text">J</text>
+            <text x="615" y="145" class="gate-text">K</text>
+            <text x="645" y="95" class="gate-text">Q</text>
+            <text x="645" y="145" class="gate-text">Q̄</text>
+            
+            <!-- FF5 (MSB) -->
+            <rect x="700" y="80" width="60" height="80" class="flip-flop" rx="5"/>
+            <text x="730" y="105" class="gate-text">JK</text>
+            <text x="730" y="118" class="gate-text">FF</text>
+            <text x="730" y="131" class="gate-text">Q5</text>
+            <text x="715" y="95" class="gate-text">J</text>
+            <text x="715" y="145" class="gate-text">K</text>
+            <text x="745" y="95" class="gate-text">Q</text>
+            <text x="745" y="145" class="gate-text">Q̄</text>
+            
+            <!-- AND Gates for ripple carry -->
+            <ellipse cx="270" cy="200" rx="15" ry="10" class="component"/>
+            <text x="270" y="205" class="gate-text">&</text>
+            
+            <ellipse cx="370" cy="200" rx="15" ry="10" class="component"/>
+            <text x="370" y="205" class="gate-text">&</text>
+            
+            <ellipse cx="470" cy="200" rx="15" ry="10" class="component"/>
+            <text x="470" y="205" class="gate-text">&</text>
+            
+            <ellipse cx="570" cy="200" rx="15" ry="10" class="component"/>
+            <text x="570" y="205" class="gate-text">&</text>
+            
+            <ellipse cx="670" cy="200" rx="15" ry="10" class="component"/>
+            <text x="670" y="205" class="gate-text">&</text>
+            
+            <!-- Parallel Load Logic -->
+            <rect x="300" y="300" width="200" height="60" class="component" rx="5"/>
+            <text x="400" y="320" class="gate-text">Parallel Load Logic</text>
+            <text x="400" y="335" class="gate-text">(Time Value Input)</text>
+            <text x="400" y="350" class="gate-text">74LS161</text>
+            
+            <!-- Zero Detector -->
+            <rect x="750" y="200" width="80" height="40" class="component" rx="5"/>
+            <text x="790" y="215" class="gate-text">Zero</text>
+            <text x="790" y="230" class="gate-text">Detect</text>
+            
+            <!-- Clock connections -->
+            <line x1="130" y1="80" x2="180" y2="80" class="wire"/>
+            <line x1="180" y1="80" x2="180" y2="40" class="wire"/>
+            <line x1="180" y1="40" x2="780" y2="40" class="wire"/>
+            
+            <!-- Clock to all FFs -->
+            <line x1="180" y1="40" x2="180" y2="170" class="wire"/>
+            <line x1="180" y1="170" x2="230" y2="170" class="wire"/>
+            <line x1="230" y1="170" x2="230" y2="160" class="wire"/>
+            
+            <line x1="180" y1="170" x2="330" y2="170" class="wire"/>
+            <line x1="330" y1="170" x2="330" y2="160" class="wire"/>
+            
+            <line x1="180" y1="170" x2="430" y2="170" class="wire"/>
+            <line x1="430" y1="170" x2="430" y2="160" class="wire"/>
+            
+            <line x1="180" y1="170" x2="530" y2="170" class="wire"/>
+            <line x1="530" y1="170" x2="530" y2="160" class="wire"/>
+            
+            <line x1="180" y1="170" x2="630" y2="170" class="wire"/>
+            <line x1="630" y1="170" x2="630" y2="160" class="wire"/>
+            
+            <line x1="180" y1="170" x2="730" y2="170" class="wire"/>
+            <line x1="730" y1="170" x2="730" y2="160" class="wire"/>
+            
+            <!-- J,K connections (all tied high for down counting) -->
+            <!-- FF0 -->
+            <line x1="200" y1="90" x2="190" y2="90" class="wire"/>
+            <line x1="190" y1="90" x2="190" y2="60" class="wire"/>
+            <line x1="190" y1="60" x2="170" y2="60" class="wire"/>
+            <text x="165" y="65" class="input-label">+5V</text>
+            
+            <line x1="200" y1="150" x2="190" y2="150" class="wire"/>
+            <line x1="190" y1="150" x2="190" y2="60" class="wire"/>
+            
+            <!-- Carry chain connections -->
+            <line x1="260" y1="95" x2="270" y2="95" class="wire"/>
+            <line x1="270" y1="95" x2="270" y2="190" class="wire"/>
+            <line x1="260" y1="145" x2="270" y2="145" class="wire"/>
+            <line x1="270" y1="145" x2="270" y2="210" class="wire"/>
+            
+            <!-- From AND gate to next FF -->
+            <line x1="285" y1="200" x2="300" y2="200" class="wire"/>
+            <line x1="300" y1="200" x2="300" y2="90" class="wire"/>
+            <line x1="300" y1="150" x2="285" y2="150" class="wire"/>
+            <line x1="285" y1="150" x2="285" y2="200" class="wire"/>
+            
+            <!-- Continue pattern for remaining stages -->
+            <line x1="360" y1="95" x2="370" y2="95" class="wire"/>
+            <line x1="370" y1="95" x2="370" y2="190" class="wire"/>
+            <line x1="360" y1="145" x2="370" y2="145" class="wire"/>
+            <line x1="370" y1="145" x2="370" y2="210" class="wire"/>
+            
+            <!-- Output connections to zero detector -->
+            <line x1="760" y1="95" x2="780" y2="95" class="wire"/>
+            <line x1="780" y1="95" x2="780" y2="200" class="wire"/>
+            <line x1="750" y1="220" x2="780" y2="220" class="wire"/>
+            
+            <!-- Parallel load connections -->
+            <line x1="400" y1="300" x2="400" y2="280" class="wire"/>
+            <line x1="400" y1="280" x2="100" y2="280" class="wire"/>
+            <line x1="100" y1="280" x2="100" y2="250" class="wire"/>
+            <text x="50" y="245" class="input-label">Load Enable</text>
+            <text x="50" y="260" class="input-label">(Payment Complete)</text>
+            
+            <!-- Labels -->
+            <text x="20" y="45" class="input-label">1Hz Clock</text>
+            <text x="20" y="60" class="input-label">(1 sec)</text>
+            
+            <text x="850" y="215" class="output-label">Time</text>
+            <text x="850" y="230" class="output-label">Expired</text>
+            
+            <text x="200" y="30" class="output-label">Minutes Remaining (6-bit binary)</text>
+            
+            <!-- Output arrows -->
+            <polygon points="830,220 845,225 830,230" fill="#2c3e50"/>
+        </svg>
+        
+        <div class="legend">
+            <h4>Counter Operation:</h4>
+            <p>1. <strong>Clock Divider:</strong> Reduces system clock to 1Hz for minute-based counting</p>
+            <p>2. <strong>JK Flip-Flops:</strong> Six cascaded flip-flops create 6-bit down counter (0-63 minutes)</p>
+            <p>3. <strong>Parallel Load:</strong> Initializes counter with purchased time value</p>
+            <p>4. <strong>Zero Detector:</strong> Generates "Time Expired" signal when count reaches 000000</p>
+            
+            <div class="timing-info">
+                <div class="time-value">15 min: 001111</div>
+                <div class="time-value">30 min: 011110</div>
+                <div class="time-value">60 min: 111100</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
